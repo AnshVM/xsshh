@@ -1,0 +1,17 @@
+{
+  "name": "xsshh",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/escodegen": "^0.0.8",
+    "bun-types": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@types/esprima": "^4.0.4",
+    "escodegen": "^2.1.0",
+    "esprima": "^4.0.1"
+  }
+}
