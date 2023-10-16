@@ -12,27 +12,23 @@ const isBaseSource = (id: string): boolean => {
     return BASE_SOURCES.includes(id);
 }
 
-type Source = {
-    // variable name of the source
-    identifier: string,
-    // the sources that control this source
-    controllers: string[],
-    // Function arguments are marked as a source by default inside the scope of a function
-    // Because we dont know what was passed
-    isFuncitonArg: boolean,
-    // The node where the variable became a source
-    node: Statement | estree.Expression,
-}
-
 export type Sinked = {
     source: string,
     sink: string,
     node: Statement | estree.Expression,
 }
 
+export type Variable = {
+    identifier: string,
+    isSource: true,
+    controllers: string[],
+    isFunctionArg: boolean,
+    node?: Statement | estree.Expression
+}
+
 export default class Scope {
     // Variables which can be controlled by attacker
-    sources: Map<string, Source> = new Map();
+    variables: Map<string, Variable> = new Map();
 
     // 'sinks' stores the defined functions which are potential sinks
     // For example : 
@@ -65,9 +61,15 @@ export default class Scope {
         // which was defined in current or parent scopes
         // The call to isBaseSource() should not take part in the recursion, it only needs to be 
         // checked once
-        if (isBaseSource(id) || this.sources.has(id)) {
+        if (isBaseSource(id)) {
             return true;
         }
+        
+        const variable = this.variables.get(id);
+        if (variable) {
+            return variable.isSource;
+        }
+
         else if (this.parent) {
             return this.parent.isSource(id);
         }
@@ -75,22 +77,25 @@ export default class Scope {
     }
 
     markSource(id: string, sources: string[], node: Statement | estree.Expression, isArg: boolean) {
-        // TODO: handle scopes
-        this.sources.set(id, {
-            identifier: id,
-            controllers: sources,
-            isFuncitonArg: isArg,
-            node,
-        })
+        const variable = this.variables.get(id);
+        if(variable) {
+            this.variables.set(id,{
+                ...variable,
+                node,
+                controllers: sources,
+                isFunctionArg:isArg
+            });
+        } else if(this.parent) {
+            this.parent.markSource(id,sources,node,isArg);
+        }
     }
 
-
     markSinked(id: string) {
-        if (this.sources.has(id)) {
-            this.sinked.push(id);
-        }
-        else if (this.parent) {
-            this.parent.markSinked(id);
+        const variable = this.variables.get(id);
+        if(variable && variable.isSource) {
+            this.sinked.push(id)
+        } else if(this.parent) {
+            this.parent.markSinked(id)
         }
     }
 
@@ -107,6 +112,4 @@ export default class Scope {
         }
         return [];
     }
-
-
 }
