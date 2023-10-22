@@ -20,7 +20,7 @@ export type Sinked = {
 
 export type Variable = {
     identifier: string,
-    isSource: true,
+    isSource: boolean,
     controllers: string[],
     isFunctionArg: boolean,
     node?: Statement | estree.Expression
@@ -54,6 +54,7 @@ export default class Scope {
 
     constructor(parent?: Scope) {
         this.parent = parent;
+        this.parent?.children.push(this);
     }
 
     isSource(id: string): boolean {
@@ -81,6 +82,7 @@ export default class Scope {
         if(variable) {
             this.variables.set(id,{
                 ...variable,
+                isSource:true,
                 node,
                 controllers: sources,
                 isFunctionArg:isArg
@@ -111,5 +113,14 @@ export default class Scope {
             return this.parent.findSink(id);
         }
         return [];
+    }
+
+    createVariable(identifier:string,isFunctionArg:boolean) {
+        this.variables.set(identifier,{
+            identifier,
+            isSource:false,
+            controllers:[],
+            isFunctionArg
+        })
     }
 }

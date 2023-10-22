@@ -3,6 +3,8 @@
   "module": "index.ts",
   "type": "module",
   "devDependencies": {
+    "@types/axios": "^0.14.0",
+    "@types/cheerio": "^0.22.32",
     "@types/escodegen": "^0.0.8",
     "bun-types": "latest"
   },
@@ -11,7 +13,11 @@
   },
   "dependencies": {
     "@types/esprima": "^4.0.4",
+    "axios": "^1.5.1",
+    "cheerio": "^1.0.0-rc.12",
+    "cli-highlight": "^2.1.11",
     "escodegen": "^2.1.0",
-    "esprima": "^4.0.1"
+    "esprima": "^4.0.1",
+    "highlight.js": "^11.9.0"
   }
 }
