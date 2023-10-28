@@ -40,3 +40,5 @@ document.outerHTML
 document.insertAdjacentHTML
 document.onevent
 ```
+![image](https://github.com/AnshVM/xsshh/assets/70061826/bac69ddd-71ac-4c64-938f-7c8944b96f95)
+
