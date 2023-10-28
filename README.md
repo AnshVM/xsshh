@@ -1,15 +1,16 @@
 # xsshh
 
-To install dependencies:
-
-```bash
-bun install
+### Setup 
 ```
-
-To run:
-
-```bash
-bun run index.ts
+$ git clone 
+$ cd xsshh
+$ bun install
 ```
-
-This project was created using `bun init` in bun v1.0.2. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.
+### Usage
+```
+$ bun run index.ts [filenames]
+```
+Example:
+```
+$ bun run index.ts samples/sample1.js samples/sample2.js
+```
