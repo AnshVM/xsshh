@@ -2,7 +2,7 @@
 
 ### Setup 
 ```
-$ git clone 
+$ git clone https://github.com/AnshVM/xsshh.git
 $ cd xsshh
 $ bun install
 ```
